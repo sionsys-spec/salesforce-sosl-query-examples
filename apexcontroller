@@ -14,3 +14,39 @@ public with sharing class SearchController {
         return searchResults;
     }
 }
+
+
+import { LightningElement, track } from 'lwc';
+import searchRecords from '@salesforce/apex/SearchController.searchRecords';
+
+export default class SoslSearch extends LightningElement {
+
+    @track results;
+
+    handleSearch(event) {
+        const searchTerm = event.target.value;
+
+        if(searchTerm.length > 2){
+            searchRecords({ searchTerm })
+            .then(data => {
+                this.results = data;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+    }
+}
+
+<template>
+
+    <lightning-input
+        label="Search"
+        onchange={handleSearch}>
+    </lightning-input>
+
+    <template if:true={results}>
+        <p>Results found!</p>
+    </template>
+
+</template>
