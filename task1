@@ -1,0 +1,14 @@
+// Example of a complex SOSL query in Salesforce
+List<List<SObject>> searchResults = [
+    FIND 'Laptop'
+    IN NAME FIELDS
+    RETURNING
+        Product2(Id, Name, ProductCode, Family LIMIT 5),
+        Account(Id, Name, Industry LIMIT 5),
+        Order(Id, OrderNumber, Status, TotalAmount LIMIT 5)
+];
+
+// Extract results
+List<Product2> products = (List<Product2>)searchResults[0];
+List<Account> accounts = (List<Account>)searchResults[1];
+List<Order> orders = (List<Order>)searchResults[2];
